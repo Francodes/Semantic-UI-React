@@ -268,8 +268,16 @@ export default class Visibility extends Component {
     _.invoke(this.props, 'onUpdate', null, { ...this.props, calculations: this.calculations })
     this.fireOnPassed()
 
-    _.forEach(callbacks, (callback, name) => this.execute(callback, name))
-    _.forEach(reverse, (callback, name) => this.execute(callback, name))
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    if (st > this.lastScrollTop){
+      console.log('down')
+      _.forEach(callbacks, (callback, name) => this.execute(callback, name))
+    } else {
+      console.log('up', onTopPassedReverse)
+      _.forEach(reverse, (callback, name) => this.execute(callback, name))
+      // upscroll code
+    }
+    this.lastScrollTop = st;
   }
 
   fireOnPassed = () => {
